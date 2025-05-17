@@ -326,9 +326,11 @@ const Tooltip = React.forwardRef(function Tooltip(inProps, ref) {
 
   const handleMouseLeave = (event: React.SyntheticEvent<HTMLElement>) => {
     enterTimer.clear();
-    leaveTimer.start(leaveDelay, () => {
-      handleClose(event);
-    });
+    if (leaveTimer.currentId == null) {
+      leaveTimer.start(leaveDelay, () => {
+        handleClose(event);
+      });
+    }
   };
 
   // We don't necessarily care about the focusVisible state (which is safe to access via ref anyway).
@@ -389,9 +391,24 @@ const Tooltip = React.forwardRef(function Tooltip(inProps, ref) {
     }
 
     stopTouchInteraction();
-    leaveTimer.start(leaveTouchDelay, () => {
-      handleClose(event);
-    });
+    if (leaveTimer.currentId == null) {
+      leaveTimer.start(leaveTouchDelay, () => {
+        handleClose(event);
+      });
+    }
+  };
+
+  const handleTouchCancel = (event: React.TouchEvent<HTMLElement>) => {
+    if (children.props.onTouchCancel) {
+      children.props.onTouchCancel(event);
+    }
+
+    stopTouchInteraction();
+    if (leaveTimer.currentId == null) {
+      leaveTimer.start(leaveTouchDelay, () => {
+        handleClose(event);
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -471,6 +488,7 @@ const Tooltip = React.forwardRef(function Tooltip(inProps, ref) {
   if (!disableTouchListener) {
     childrenProps.onTouchStart = handleTouchStart;
     childrenProps.onTouchEnd = handleTouchEnd;
+    childrenProps.onTouchCancel = handleTouchCancel;
   }
 
   if (!disableHoverListener) {

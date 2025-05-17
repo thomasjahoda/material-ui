@@ -97,6 +97,7 @@ const ButtonBase = React.forwardRef(function ButtonBase(inProps, ref) {
     onMouseDown,
     onMouseLeave,
     onMouseUp,
+    onTouchCancel,
     onTouchEnd,
     onTouchMove,
     onTouchStart,
@@ -154,6 +155,7 @@ const ButtonBase = React.forwardRef(function ButtonBase(inProps, ref) {
     disableTouchRipple,
   );
   const handleTouchStart = useRippleHandler(ripple, 'start', onTouchStart, disableTouchRipple);
+  const handleTouchCancel = useRippleHandler(ripple, 'stop', onTouchCancel, disableTouchRipple);
   const handleTouchEnd = useRippleHandler(ripple, 'stop', onTouchEnd, disableTouchRipple);
   const handleTouchMove = useRippleHandler(ripple, 'stop', onTouchMove, disableTouchRipple);
 
@@ -299,6 +301,7 @@ const ButtonBase = React.forwardRef(function ButtonBase(inProps, ref) {
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
       onDragLeave={handleDragLeave}
+      onTouchCancel={handleTouchCancel}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}
       onTouchStart={handleTouchStart}
@@ -449,6 +452,10 @@ ButtonBase.propTypes /* remove-proptypes */ = {
    * @ignore
    */
   onMouseUp: PropTypes.func,
+  /**
+   * @ignore
+   */
+  onTouchCancel: PropTypes.func,
   /**
    * @ignore
    */

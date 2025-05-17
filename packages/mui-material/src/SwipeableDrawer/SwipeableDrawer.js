@@ -307,6 +307,7 @@ const SwipeableDrawer = React.forwardRef(function SwipeableDrawer(inProps, ref) 
       });
     }
   });
+  // TODO handle touchcancel?
 
   const startMaybeSwiping = (force = false) => {
     if (!maybeSwiping) {

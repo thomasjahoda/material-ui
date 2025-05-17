@@ -246,7 +246,7 @@ ClickAwayListener.propTypes /* remove-proptypes */ = {
    * The touch event to listen to. You can disable the listener by providing `false`.
    * @default 'onTouchEnd'
    */
-  touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false]),
+  touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false]), // TODO handle touchcancel?
 } as any;
 
 if (process.env.NODE_ENV !== 'production') {

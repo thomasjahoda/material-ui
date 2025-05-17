@@ -270,7 +270,7 @@ const TouchRipple = React.forwardRef(function TouchRipple(inProps, ref) {
 
       // The touch interaction occurs too quickly.
       // We still want to show ripple effect.
-      if (event?.type === 'touchend' && startTimerCommit.current) {
+      if ((event?.type === 'touchend' || event?.type === 'touchcancel') && startTimerCommit.current) {
         startTimerCommit.current();
         startTimerCommit.current = null;
         startTimer.start(0, () => {

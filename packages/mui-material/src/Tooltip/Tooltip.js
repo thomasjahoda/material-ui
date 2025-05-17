@@ -533,6 +533,17 @@ const Tooltip = React.forwardRef(function Tooltip(inProps, ref) {
     });
   };
 
+  const handleTouchCancel = (event) => {
+    if (children.props.onTouchCancel) {
+      children.props.onTouchCancel(event);
+    }
+
+    stopTouchInteraction();
+    leaveTimer.start(leaveTouchDelay, () => {
+      handleClose(event);
+    });
+  };
+
   React.useEffect(() => {
     if (!open) {
       return undefined;
@@ -619,6 +630,7 @@ const Tooltip = React.forwardRef(function Tooltip(inProps, ref) {
   if (!disableTouchListener) {
     childrenProps.onTouchStart = handleTouchStart;
     childrenProps.onTouchEnd = handleTouchEnd;
+    childrenProps.onTouchCancel = handleTouchCancel;
   }
 
   if (!disableHoverListener) {

@@ -373,7 +373,7 @@ Snackbar.propTypes /* remove-proptypes */ = {
           false,
         ]),
         onClickAway: PropTypes.func,
-        touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false]),
+        touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false]), // TODO handle touchcancel?
       }),
     ]),
     content: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),

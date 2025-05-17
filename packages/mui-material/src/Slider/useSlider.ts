@@ -542,7 +542,7 @@ export function useSlider(parameters: UseSliderParameters): UseSliderReturnValue
     // @ts-ignore buttons doesn't not exists on touch event
     if (nativeEvent.type === 'mousemove' && nativeEvent.buttons === 0) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      handleTouchEnd(nativeEvent);
+      handleTouchEndOrCancel(nativeEvent);
       return;
     }
 
@@ -563,7 +563,7 @@ export function useSlider(parameters: UseSliderParameters): UseSliderReturnValue
     }
   });
 
-  const handleTouchEnd = useEventCallback((nativeEvent: TouchEvent | MouseEvent) => {
+  const handleTouchEndOrCancel = useEventCallback((nativeEvent: TouchEvent | MouseEvent) => {
     const finger = trackFinger(nativeEvent, touchId);
     setDragging(false);
 
@@ -617,16 +617,18 @@ export function useSlider(parameters: UseSliderParameters): UseSliderReturnValue
     moveCount.current = 0;
     const doc = ownerDocument(sliderRef.current);
     doc.addEventListener('touchmove', handleTouchMove, { passive: true });
-    doc.addEventListener('touchend', handleTouchEnd, { passive: true });
+    doc.addEventListener('touchend', handleTouchEndOrCancel, { passive: true });
+    doc.addEventListener('touchcancel', handleTouchEndOrCancel, { passive: true });
   });
 
   const stopListening = React.useCallback(() => {
     const doc = ownerDocument(sliderRef.current);
     doc.removeEventListener('mousemove', handleTouchMove);
-    doc.removeEventListener('mouseup', handleTouchEnd);
+    doc.removeEventListener('mouseup', handleTouchEndOrCancel);
     doc.removeEventListener('touchmove', handleTouchMove);
-    doc.removeEventListener('touchend', handleTouchEnd);
-  }, [handleTouchEnd, handleTouchMove]);
+    doc.removeEventListener('touchend', handleTouchEndOrCancel);
+    doc.removeEventListener('touchcancel', handleTouchEndOrCancel);
+  }, [handleTouchEndOrCancel, handleTouchMove]);
 
   React.useEffect(() => {
     const { current: slider } = sliderRef;
@@ -680,7 +682,7 @@ export function useSlider(parameters: UseSliderParameters): UseSliderReturnValue
       moveCount.current = 0;
       const doc = ownerDocument(sliderRef.current);
       doc.addEventListener('mousemove', handleTouchMove, { passive: true });
-      doc.addEventListener('mouseup', handleTouchEnd);
+      doc.addEventListener('mouseup', handleTouchEndOrCancel);
     };
 
   const trackOffset = valueToPercent(range ? values[0] : min, min, max);
